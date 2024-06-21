@@ -1,0 +1,34 @@
+[MESSAGES CONTROL]
+
+# Disable the message, report, category or checker with the given id(s).
+disable=missing-docstring,no-else-return
+
+
+ 
+
+
+[BASIC]
+
+# Naming style matching correct method names.
+method-naming-style=any
+
+# Regular expression matching correct variable names. Overrides variable-naming-style.
+# This is a snake_case regular expression which allows for variable names of 1 character.
+#variable-rgx=[a-z_][a-z0-9_]{0,30}$
+
+# Good variable names which should always be accepted, separated by a comma.
+good-names=i,j,k,ex,s,x,y,p,c
+
+
+
+
+[MASTER]
+
+# A comma-separated list of package or module names from where C extensions may
+# be loaded. Extensions are loading into the active Python interpreter and may
+# run arbitrary code.
+extension-pkg-whitelist=PySide6
+
+# Add files or directories to the blacklist. They should be base names, not
+# paths.
+ignore=resources.py

@@ -1,0 +1,8 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="images">
+        <file alias="snakehead.png">assets/snakehead.png</file>
+        <file alias="snakebody.png">assets/snakebody.png</file>
+        <file alias="apple.png">assets/apple.png</file>
+    </qresource>
+</RCC>
