@@ -1,10 +1,15 @@
 [MESSAGES CONTROL]
 
 # Disable the message, report, category or checker with the given id(s).
-disable=missing-docstring,no-else-return
+disable=missing-docstring,no-else-return,duplicate-code,too-many-instance-attributes,too-few-public-methods
 
 
- 
+
+
+[MAIN]
+max-line-length=110 
+
+
 
 
 [BASIC]
@@ -17,7 +22,7 @@ method-naming-style=any
 #variable-rgx=[a-z_][a-z0-9_]{0,30}$
 
 # Good variable names which should always be accepted, separated by a comma.
-good-names=i,j,k,ex,s,x,y,p,c
+good-names=args,i,j,k,ex,s,x,y,x1,y1,p,c,r,w,h,ch
 
 
 

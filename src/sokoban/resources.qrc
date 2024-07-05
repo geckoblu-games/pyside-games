@@ -1,0 +1,23 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource prefix="images">
+	    <file alias="icon.svg">assets/icon.svg</file>
+        <file alias="ground.svg">assets/ground.svg</file>
+        <file alias="wall.svg">assets/wall.svg</file>
+        <file alias="box.svg">assets/box.svg</file>
+        <file alias="box_on_target.png">assets/box_on_target.svg</file>
+        <file alias="goal.svg">assets/goal.svg</file>
+        <file alias="player_down_1.svg">assets/player_down_1.svg</file>
+        <file alias="player_down_2.svg">assets/player_down_2.svg</file>
+        <file alias="player_down_3.svg">assets/player_down_3.svg</file>
+        <file alias="player_up_1.svg">assets/player_up_1.svg</file>
+        <file alias="player_up_2.svg">assets/player_up_2.svg</file>
+        <file alias="player_up_3.svg">assets/player_up_3.svg</file>
+        <file alias="player_right_1.svg">assets/player_right_1.svg</file>
+        <file alias="player_right_2.svg">assets/player_right_2.svg</file>
+        <file alias="player_right_3.svg">assets/player_right_3.svg</file>
+        <file alias="player_left_1.svg">assets/player_left_1.svg</file>
+        <file alias="player_left_2.svg">assets/player_left_2.svg</file>
+        <file alias="player_left_3.svg">assets/player_left_3.svg</file>
+    </qresource>
+</RCC>

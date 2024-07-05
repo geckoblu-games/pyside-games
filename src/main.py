@@ -6,6 +6,7 @@ from PySide6.QtGui import QIcon, QScreen
 from PySide6.QtWidgets import QVBoxLayout, QApplication, QPushButton, QDialog
 
 import snake
+import sokoban.main
 
 
 class MainWindow(QDialog):
@@ -57,6 +58,8 @@ def main():
 
     if args.game == 'snake':
         snake.main(app)
+    elif args.game == 'sokoban':
+        sokoban.main.main(app)
 
 
 def parse_cmdline():

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   width="64px"
+   height="64px"
+   viewBox="0 0 64 64"
+   version="1.1"
+   id="SVGRoot">
+  <defs
+     id="defs4515" />
+  <metadata
+     id="metadata4518">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1">
+    <g
+       transform="translate(-366,-70)"
+       id="g2708">
+      <g
+         id="use2706">
+        <path
+           style="fill:#33e27d;stroke:none"
+           id="path5339"
+           d="M 430,77.95 Q 430,70 422.05,70 h -48.1 Q 366,70 366,77.95 v 48.1 q 0,7.95 7.95,7.95 h 48.1 q 7.95,0 7.95,-7.95 V 77.95 M 422.05,72 q 5.95,0 5.95,5.95 v 48.1 q 0,5.95 -5.95,5.95 h -48.1 Q 368,132 368,126.05 V 77.95 Q 368,72 373.95,72 Z" />
+        <path
+           style="fill:#2ecc71;stroke:none"
+           id="path5341"
+           d="M 428,77.95 Q 428,72 422.05,72 h -48.1 Q 368,72 368,77.95 v 48.1 q 0,5.95 5.95,5.95 h 48.1 q 5.95,0 5.95,-5.95 V 77.95 M 410,80 h 10 v 10 24 10 H 410 386 376 V 114 90 80 h 10 z" />
+        <path
+           style="fill:#28b462;stroke:none"
+           id="path5343"
+           d="m 420,124 v -10 l -9.5,-9.5 -10,10 9.5,9.5 h 10 m -34,0 9.5,-9.5 -10,-10 -9.5,9.5 v 10 h 10 m 2,-22 10,10 10,-10 -10,-10 -10,10 M 395.5,89.5 386,80 h -10 v 10 l 9.5,9.5 10,-10 M 420,80 h -10 l -9.5,9.5 10,10 9.5,-9.5 z" />
+        <path
+           style="fill:#219853;stroke:none"
+           id="path5345"
+           d="m 386,80 9.5,9.5 -10,10 L 376,90 v 24 l 9.5,-9.5 10,10 -9.5,9.5 h 24 l -9.5,-9.5 10,-10 9.5,9.5 V 90 l -9.5,9.5 -10,-10 9.5,-9.5 h -24 m 12,32 -10,-10 10,-10 10,10 z" />
+      </g>
+    </g>
+  </g>
+</svg>
