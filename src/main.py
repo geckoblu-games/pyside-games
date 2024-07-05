@@ -25,6 +25,10 @@ class MainWindow(QDialog):
         button = QPushButton("Snake")
         button.clicked.connect(lambda: self.the_button_was_clicked('snake'))
         self.layout.addWidget(button)
+        
+        button = QPushButton("Sokoban")
+        button.clicked.connect(lambda: self.the_button_was_clicked('sokoban'))
+        self.layout.addWidget(button)
 
         self.setLayout(self.layout)
 
