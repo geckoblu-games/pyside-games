@@ -29,9 +29,9 @@ else:
 WINDOW_WIDTH = VIEW_GRID_WIDTH * CELL_SIZE
 WINDOW_HEIGHT = VIEW_GRID_HEIGHT * CELL_SIZE
 
-COLOR_BACKGROUND = QColor("#131926")  # QColor("#131926")
+COLOR_BACKGROUND = QColor("#131926")  
 COLOR_GRAY = QColor("#333333")
-COLOR_FLOOR = Qt.GlobalColor.darkGray  # QColor("#AAAAAA")
+COLOR_FLOOR = Qt.GlobalColor.darkGray  
 
 
 @dataclass
