@@ -46,5 +46,15 @@ Levels:
 - [Heloban](http://hexoban.free.fr/index.php?lg=en&z=player&p=collections)
 - [Heroban](http://hexoban.free.fr/index.php?lg=en&z=player&p=collections)
 
+## Mazegenerator
+
+Visualizes the generation of mazes using different algorithms
+
+
+**Useful links**
+
+- [Wikipedia: Maze generation algorithm](https://en.wikipedia.org/wiki/Maze_generation_algorithm)
+- [Think Labyrinth: Maze Algorithms](https://www.astrolog.org/labyrnth/algrithm.htm)
+- [Visualizing Algorithms](https://bost.ocks.org/mike/algorithms/#maze-generation)
 
 - [StackOverflow: What's a good algorithm to generate a maze?](https://stackoverflow.com/questions/38502/whats-a-good-algorithm-to-generate-a-maze)

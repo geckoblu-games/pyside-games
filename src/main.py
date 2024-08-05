@@ -7,6 +7,7 @@ from PySide6.QtWidgets import QVBoxLayout, QApplication, QPushButton, QDialog
 
 import snake
 import sokoban.main
+import mazegenerator.main
 
 
 class MainWindow(QDialog):
@@ -28,6 +29,10 @@ class MainWindow(QDialog):
         
         button = QPushButton("Sokoban")
         button.clicked.connect(lambda: self.the_button_was_clicked('sokoban'))
+        self.layout.addWidget(button)
+        
+        button = QPushButton("Maze Generator")
+        button.clicked.connect(lambda: self.the_button_was_clicked('mazegenerator'))
         self.layout.addWidget(button)
 
         self.setLayout(self.layout)
@@ -64,12 +69,14 @@ def main():
         snake.main(app)
     elif args.game == 'sokoban':
         sokoban.main.main(app)
+    elif args.game == 'mazegenerator':
+        mazegenerator.main.main(app)
 
 
 def parse_cmdline():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--game', choices=['snake', 'sokoban'],
+    parser.add_argument('--game', choices=['snake', 'sokoban', 'mazegenerator'],
                         type=str.lower, help='directly starts the provided game')
 
     return parser.parse_args()
