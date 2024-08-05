@@ -31,3 +31,20 @@ Microban and Sasquatch levels sets by [David W. Skinner](http://www.abelmartin.c
 - [Sokoban Online](https://www.sokobanonline.com/)
 - [The basics of Sokoban level formats ...](https://alonso-delarte.medium.com/the-basics-of-sokoban-level-formats-for-designing-your-own-sokoban-levels-51882a7a36f0)
 - [Rust Sokoban](https://sokoban.iolivia.me/)
+
+## Hexoban
+
+[TODO]
+
+A variant of Sokoban originally described by [David W. Skinner](http://www.abelmartin.com/rj/sokobanJS/Skinner/David%20W.%20Skinner%20-%20Sokoban.htm).
+Follows the same rules of Sokoban but on an hexagonal grid
+
+**Credits**
+
+Levels:
+- [Hexcotet](https://aymericdupeloux.wixsite.com/sokoban/post/hexocet)
+- [Heloban](http://hexoban.free.fr/index.php?lg=en&z=player&p=collections)
+- [Heroban](http://hexoban.free.fr/index.php?lg=en&z=player&p=collections)
+
+
+- [StackOverflow: What's a good algorithm to generate a maze?](https://stackoverflow.com/questions/38502/whats-a-good-algorithm-to-generate-a-maze)

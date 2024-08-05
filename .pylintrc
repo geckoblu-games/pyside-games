@@ -22,7 +22,7 @@ method-naming-style=any
 #variable-rgx=[a-z_][a-z0-9_]{0,30}$
 
 # Good variable names which should always be accepted, separated by a comma.
-good-names=args,i,j,k,ex,s,x,y,x1,y1,p,c,r,w,h,ch
+good-names=args,i,j,k,ex,s,x,y,x1,y1,p,c,r,w,h,ch,fc,fr,tc,tr
 
 
 

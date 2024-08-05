@@ -1,0 +1,253 @@
+Author:       Aymeric du Peloux (Hexocet)
+
+       # #           
+      # @ #            
+     # . $ #           
+    # $ #   #            
+ # # .   . $ # #         
+#     #   #     #         
+ #   # #   #   #       
+#               #         
+ # # # # #   # #         
+          # #            
+Title: A
+Difficulty: 5
+Date: Jan.2002
+                    
+      # #                 
+   # # @ #               
+  #       # #              
+ #   # $ $   #             
+#     * . #   #              
+ #   # * #   #              
+  #     .   #               
+   # # # # #   
+Title: Perfume
+Difficulty: 4.5
+Date: Jan.2002
+
+
+     # #
+  # # @ # #
+ #         #
+  #   #   #
+ # $ $ $ $ #
+#   #   #   #
+ # . . . . #
+  #   #   #
+   #     #
+    # # #
+Title: Mud
+Difficulty: 4
+Date: Jan.2002
+
+                
+ # # # #
+#       #
+ # $ $   # #
+  # + #     #
+ # * * .   #
+#           #
+ #   # # # #
+  # #
+Title: X
+Difficulty: 4,5
+Date: Jan.2002
+                    
+      # #
+     # @ # #
+    # $     #
+ # # . . $ #
+#     $ #   #
+ #   * .     #
+  # # # #     #
+         # # #
+Title: Wildmill with 3 arms
+Difficulty: 6
+Date: Jan.2002
+                
+      # #               
+   # # @ #
+  #     $ #
+   #   #   # #         
+  #   #   $   #         
+ #   . . . . #         
+#   $   # $   #         
+ # # #     # #         
+      # # #    
+Title: Four
+Difficulty: 5,5
+Date: Jan.2002
+
+        # #                                      
+   # # #   #                                     
+  #   $     #                                    
+ #   # *   #                                     
+  #   .   #
+ # $ *   @ #                                     
+#   .   # #                                      
+ #   # #                                         
+  # #
+Title: Bird
+Difficulty: 4,5
+Date: Jan.2002
+
+  # # # # #
+ #         #
+#   #   * #
+ # $ +   * #
+  #   * #   #
+ #         #
+  # # # # #
+Title: V
+Difficulty: 6
+Date: Feb.2002
+
+  # # # # #
+ #         #
+  # $ # #   #
+ # $ . . @ #
+#     # .   #
+ # # $ . #   #
+    #   $     #
+     #   # # # #
+      # #
+Title: Bridge
+Difficulty: 4
+Date: Feb.2002
+
+   # # #
+  #     # # #
+   #   +     #
+  #     # #   #
+ #   *   *   #
+#   # # $ # #
+ #       #
+  # # # #
+Title: Gun
+Difficulty: 3,5
+Date: Feb.2002
+
+   # # # #
+  #       #
+   #   # * # #
+  #   .       #
+ # $ # + # * #
+#             #
+ # # $   # # #
+    #   #
+     # #
+Title: Kite
+Difficulty: 6
+Date: Feb.2002
+
+     # # #
+    #     #
+ # # $ + $ # #
+#     * *     #
+ # $ . # . $ #
+  #   . .   #
+   # $ . $ #
+    #     #
+   #       #
+    # # # #
+Title: Fed Cup
+Difficulty: 6,5
+Date: Feb.2002
+
+     # # #
+    #     #
+ # # $ + $ # #
+#     * *     #
+ # $ . # . $ #
+  #   . .     #
+ #   $ . $ # #
+  # #     #
+     # # #
+Title: Beetle
+Difficulty: 8
+Date: Feb.2002
+
+    # #                                
+ # # @ #                               
+#   * $ # #                            
+ #   . *   #                           
+  #     #   #                          
+ #         #                           
+  # # # # #   
+Title: Little rabbit
+Difficulty: 3
+Date: Mar.2002
+  
+   # #                               
+  #   # # # # #                       
+ #             #                     
+#   .   * #   #                       
+ #   # $ #     #                     
+#     * @ * # #                       
+ # # # #   #                         
+        # #    
+Title: Losange
+Difficulty: 6
+Date: Mar.2002
+
+     
+        # # #
+       #     #
+  # # # $ + # # #
+ #     $   $ $   #
+  #     . . .   #
+   # # # # # # #     
+Title: Big tank
+Difficulty: 5,5
+Date: Mar.2002    
+        
+     # # #                           
+    #     #                           
+   # #   + # #                       
+  #     $ $   #                       
+   #   # # . #                       
+  #       . #                         
+   # # $   #                         
+      #   #                           
+       # #  
+Title: Coeur (Heart)
+Difficulty: 5
+Date: Mar.2002       
+
+   # # #
+  #     #
+ #     * # # #
+#   . * @ $   #
+ # # # . $ #   #
+    #         #
+     #   # # #
+      # #
+Title: Uranium
+Difficulty: 6
+Date: Mar.2002                 
+
+  # #                           
+ #   # # # # #                   
+#   .   .   . #                 
+ # $ .   # $ #                   
+  #   #     #                   
+   # $     $ #                   
+    #   # #   #                 
+   #     @   #                   
+    # # # # #  
+Title: Cesar
+Difficulty: 5,5
+Date: Mar.2002           
+
+         # # #                           
+  # # # #     #                          
+ #     * +   #                           
+#     * # *   #                          
+ # #   * *     #                         
+    #     $   #                          
+     # # #   #                           
+          # #  
+Title: barrel
+Difficulty: 8,5
+Date: Mar.2002
