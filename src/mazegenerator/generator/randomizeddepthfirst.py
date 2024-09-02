@@ -75,7 +75,7 @@ class Maze:
                 return
 
 
-def generate(maze: Maze, start_column=-1, start_row=-1):
+def generate(maze: Maze, start_column=-1, start_row=-1, depthfirst=True):
 
     if start_column < 0 or start_column >= maze.columns:
         start_column = randint(0, maze.columns - 1)
@@ -103,7 +103,12 @@ def generate(maze: Maze, start_column=-1, start_row=-1):
                 neighbor_coord = maze.neighbor(coord, direction)
                 # print("\t", direction, neighbor_coord)
                 if neighbor_coord and not maze[neighbor_coord].is_visited():  # can be None
-                    to_visit.append((coord, neighbor_coord))
+                    if depthfirst:
+                        # depth first: append at the top
+                        to_visit.insert(0, (coord, neighbor_coord))
+                    else:
+                        # breadth first: append at the end
+                        to_visit.append((coord, neighbor_coord))
                 else:
                     pass
                     # print(coord, direction, neighbor_coord)
@@ -131,7 +136,7 @@ def display(maze: Maze):
             else:
                 sys.stdout.write(' ')
             if maze[(column, row)].is_visited():
-                sys.stdout.write(' . ')
+                sys.stdout.write('   ')
             else:
                 sys.stdout.write(' # ')
         sys.stdout.write('|\n')
@@ -143,15 +148,15 @@ def display(maze: Maze):
 if __name__ == '__main__':
     print("start")
 
-    maz = Maze(8, 4)
+    maz = Maze(8, 6)
 
     display_step = True
 
-    for i in generate(maz, 0, 0):
+    for i in generate(maz, 0, 0, depthfirst=True):
         if display_step:
             print(' ')
             display(maz)
-            time.sleep(.5)
+            time.sleep(.2)
 
     print(' ')
     display(maz)
