@@ -3,118 +3,83 @@ import random
 import sys
 import time
 
+from PySide6.QtCore import QObject, Signal
+
 from mazegenerator import Direction
+from mazegenerator.maze import Maze
 
 
-class MazeCell:
+class RandomizedDepthFirst(QObject):
 
-    def __init__(self):
-        self.visited = False
-        self.walls = Direction.NORTH | Direction.SOUTH | Direction.EAST | Direction.WEST
+    # Signals
+    visiting = Signal(tuple)
+    processing = Signal(tuple)
 
-    def is_visited(self) -> bool:
-        return self.visited
+    def __init__(self, maze: Maze, start_column=-1, start_row=-1,
+                 start_at_center=True, start_at_random=False, depthfirst=True):
+        super().__init__()
 
-    def set_visited(self):
-        self.visited = True
+        self._depthfirst = depthfirst
+        self._maze = maze
 
-    def has_wall(self, direction: Direction) -> bool:
-        # print(self.walls & direction > 0)
-        return self.walls & direction > 0
+        if start_column < 0 or start_column >= maze.columns:
+            if start_at_center:
+                start_column = int(maze.columns / 2)
+            elif start_at_random:
+                start_column = randint(0, maze.columns - 1)
+            else:
+                raise Exception(f"Invalid start_colum: {start_column}")
+        if start_row < 0 or start_row >= maze.rows:
 
-    def remove_wall(self, direction: Direction):
-        self.walls &= ~direction
+            if start_at_center:
+                start_row = int(maze.rows / 2)
+            elif start_at_random:
+                start_row = randint(0, maze.rows - 1)
+            else:
+                raise Exception(f"Invalid start_colum: {start_column}")
 
+        self._maze.start_column = start_column
+        self._maze.start_row = start_row
+        self.sleep = 0
 
-class Maze:
+    def run(self, sleep=0):
 
-    def __init__(self, columns: int, rows: int):
-        self.columns = columns
-        self.rows = rows
-        self.start_column = -1
-        self.start_row = -1
+        self.sleep = sleep
+        to_visit = []
+        to_visit.append((None, (self._maze.start_column, self._maze.start_row)))
+        # print(f"Starting from {to_visit[0]}")
 
-        self.cells = [MazeCell() for _ in range(rows * columns)]
+        directions = [Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST]
 
-    def __getitem__(self, coord):
-        column, row = coord
-        return self.cells[self.columns * row + column]
-
-    def neighbor(self, coord: (int, int), direction: Direction) -> (int, int):
-        column, row = coord
-        if direction == Direction.NORTH and row > 0:
-            return (column, row - 1)
-        if direction == Direction.SOUTH and row < self.rows - 1:
-            return (column, row + 1)
-        if direction == Direction.WEST and column > 0:
-            return (column - 1, row)
-        if direction == Direction.EAST and column < self.columns - 1:
-            return (column + 1, row)
-        return None
-
-    def crave_passage(self, from_coord, to_coord):
-        fc, fr = from_coord
-        tc, tr = to_coord
-        if fc == tc:
-            if fr < tr:
-                self[from_coord].remove_wall(Direction.SOUTH)
-                self[to_coord].remove_wall(Direction.NORTH)
-                return
-            if fr > tr:
-                self[from_coord].remove_wall(Direction.NORTH)
-                self[to_coord].remove_wall(Direction.SOUTH)
-                return
-        else:
-            if fc < tc:
-                self[from_coord].remove_wall(Direction.EAST)
-                self[to_coord].remove_wall(Direction.WEST)
-                return
-            if fc > tc:
-                self[from_coord].remove_wall(Direction.WEST)
-                self[to_coord].remove_wall(Direction.EAST)
-                return
-
-
-def generate(maze: Maze, start_column=-1, start_row=-1, depthfirst=True):
-
-    if start_column < 0 or start_column >= maze.columns:
-        start_column = randint(0, maze.columns - 1)
-    if start_row < 0 or start_row >= maze.rows:
-        start_row = randint(0, maze.rows - 1)
-    maze.start_column = start_column
-    maze.start_row = start_row
-
-    to_visit = []
-    to_visit.append((None, (start_column, start_row)))
-    # print(f"Starting from {to_visit[0]}")
-
-    directions = [Direction.NORTH, Direction.SOUTH, Direction.EAST, Direction.WEST]
-
-    while len(to_visit) > 0:
-        from_coord, coord = to_visit.pop(0)
-        if not maze[coord].is_visited():
-            # print(f"Visiting: {coord}")
-            maze[coord].set_visited()
-            if from_coord:  # None just at the first step
-                maze.crave_passage(from_coord, coord)
-            yield
-            random.shuffle(directions)
-            for direction in directions:
-                neighbor_coord = maze.neighbor(coord, direction)
-                # print("\t", direction, neighbor_coord)
-                if neighbor_coord and not maze[neighbor_coord].is_visited():  # can be None
-                    if depthfirst:
-                        # depth first: append at the top
-                        to_visit.insert(0, (coord, neighbor_coord))
+        step = -1
+        while len(to_visit) > 0:
+            time.sleep(self.sleep)
+            from_coord, coord = to_visit.pop(0)
+            self.visiting.emit(coord)
+            if not self._maze[coord].is_visited():
+                self._maze[coord].set_visited()
+                if from_coord:  # None just at the first step
+                    self._maze.crave_passage(from_coord, coord)
+                step += 1
+                self.processing.emit((from_coord, coord))
+                # yield (from_coord, coord)
+                random.shuffle(directions)
+                for direction in directions:
+                    neighbor_coord = self._maze.neighbor(coord, direction)
+                    # print("\t", direction, neighbor_coord)
+                    if neighbor_coord and not self._maze[neighbor_coord].is_visited():  # can be None
+                        if self._depthfirst:
+                            # depth first: append at the top
+                            to_visit.insert(0, (coord, neighbor_coord))
+                        else:
+                            # breadth first: append at the end
+                            to_visit.append((coord, neighbor_coord))
                     else:
-                        # breadth first: append at the end
-                        to_visit.append((coord, neighbor_coord))
-                else:
-                    pass
-                    # print(coord, direction, neighbor_coord)
-        else:
-            pass
-            # print(f"\tSkipping: {coord}")
+                        pass
+                        # print(coord, direction, neighbor_coord)
+            else:
+                pass
+                # print(f"\tSkipping: {coord}")
 
 
 def display(maze: Maze):
@@ -143,23 +108,35 @@ def display(maze: Maze):
 
     # draw the bottom line
     print('+---' * maze.columns + '+')
+    print()
 
 
 if __name__ == '__main__':
-    print("start")
 
-    maz = Maze(8, 6)
+    def test():
+        print("start")
 
-    display_step = True
+        maze = Maze(8, 6)
 
-    for i in generate(maz, 0, 0, depthfirst=True):
+        display_step = True
+
+        alg = RandomizedDepthFirst(maze, 0, 0)
+        # alg.visiting.connect(lambda coord: print(f"Visiting: {coord}"))
         if display_step:
-            print(' ')
-            display(maz)
-            time.sleep(.2)
+            alg.visiting.connect(lambda coord: display(maze))
 
-    print(' ')
-    display(maz)
+        alg.run(.2)
 
-    print(' ')
-    print("end")
+        # for step in generate(maze, 0, 0, depthfirst=True):
+        #     if display_step:
+        #         print(' ')
+        #         display(maze)
+        #         time.sleep(.2)
+
+        print(' ')
+        display(maze)
+
+        print(' ')
+        print("end")
+
+    test()

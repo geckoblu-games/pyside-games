@@ -25,7 +25,7 @@ class Sok2Py:
 
         inlevel = False
         level = []
-        for i, line in enumerate(inputlines):
+        for step, line in enumerate(inputlines):
             stripped_line = line.strip()
 
             # Comment
@@ -41,7 +41,7 @@ class Sok2Py:
 
             if not inlevel and '#' in stripped_line:
                 inlevel = True
-                title = inputlines[i - 2].strip()
+                title = inputlines[step - 2].strip()
                 if title.startswith('; '):  # Microban
                     title = title[2:]
                 title = title.replace("'", "\\'")

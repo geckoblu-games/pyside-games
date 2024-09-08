@@ -1,12 +1,9 @@
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QPainter, QPen, QPalette
-from PySide6.QtWidgets import QMainWindow, QGraphicsScene, QGraphicsView, \
-    QGraphicsLineItem
+from PySide6.QtGui import QPainter, QPalette
+from PySide6.QtWidgets import QMainWindow, QGraphicsScene, QGraphicsView
 
-from mazegenerator import CELL_SIZE, COLOR_BACKGROUND
-from mazegenerator.qgraphicsgrid import QGraphicsItemCell
+from mazegenerator import CELL_SIZE, MAZE_COLUMNS, MAZE_ROWS
 from mazegenerator.qmainwidget import QMainWidget
-
 
 #
 # DEBUG = False
@@ -20,11 +17,6 @@ from mazegenerator.qmainwidget import QMainWidget
 #
 WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 650
-#
-# COLOR_BACKGROUND = QColor("#131926") # Beautiful Black
-
-MAZE_COLUMNS = 50
-MAZE_ROWS = 38
 
 SCENE_WIDTH = MAZE_COLUMNS * CELL_SIZE
 SCENE_HEIGHT = MAZE_ROWS * CELL_SIZE
@@ -39,7 +31,7 @@ class MainWindow(QMainWindow):
         self.setMinimumSize(WINDOW_WIDTH, WINDOW_HEIGHT)
         # self.setMaximumSize(WINDOW_WIDTH, WINDOW_HEIGHT)
         # self.setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT)
-        self.move(10, 40)
+        self.move(300, 20)
 
         print(SCENE_WIDTH, SCENE_HEIGHT)
         self.scene = QGraphicsScene(0, 0, SCENE_WIDTH, SCENE_HEIGHT)
@@ -55,41 +47,23 @@ class MainWindow(QMainWindow):
         # # self.view.setFixedSize(WINDOW_WIDTH, WINDOW_HEIGHT)
         # # self.view.setMaximumSize(WINDOW_WIDTH, WINDOW_HEIGHT)
         self.view.setSceneRect(-1, -1, SCENE_WIDTH, SCENE_HEIGHT)
-        
+
         palette = self.palette()
-        print(palette.color(QPalette.Window).value())
         self.view.setBackgroundBrush(palette.color(QPalette.Window))
 
-        self.setCentralWidget(QMainWidget(self.view))
+        self.setCentralWidget(QMainWidget(self.scene, self.view))
 
         # print("Window:", self.size())
         # print("Scene:", self.scene.sceneRect())
         # print("View:", self.view.size())
         # print("View:", self.view.sceneRect())
-        
-        cell = QGraphicsItemCell()
-        cell.setGridPos(2, 2)
-        self.scene.addItem(cell)
+
+        # cell = QGraphicsItemCell()
+        # cell.setGridPos(10, 10)
+        # self.scene.addItem(cell)
 
         # for row in range(0, MAZE_ROWS):
         #     for column in range(0, MAZE_COLUMNS):
         #         cell = QGraphicsItemCell()
         #         cell.setGridPos(column, row)
         #         self.scene.addItem(cell)
-
-        # Perimeter
-        pen = QPen(Qt.GlobalColor.black)
-        pen.setWidth(2)
-        line = QGraphicsLineItem(0, 0, SCENE_WIDTH, 0)
-        line.setPen(pen)
-        self.scene.addItem(line)
-        line = QGraphicsLineItem(SCENE_WIDTH, 0, SCENE_WIDTH, SCENE_HEIGHT)
-        line.setPen(pen)
-        self.scene.addItem(line)
-        line = QGraphicsLineItem(0, SCENE_HEIGHT, SCENE_WIDTH, SCENE_HEIGHT)
-        line.setPen(pen)
-        self.scene.addItem(line)
-        line = QGraphicsLineItem(0, 0, 0, SCENE_HEIGHT)
-        line.setPen(pen)
-        self.scene.addItem(line)
-
