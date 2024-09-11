@@ -82,36 +82,35 @@ class RandomizedDepthFirst(QObject):
                 # print(f"\tSkipping: {coord}")
 
 
-def display(maze: Maze):
-
-    for row in range(0, maze.rows):
-
-        # draw the north edge
-        for column in range(0, maze.columns):
-            if maze[(column, row)].has_wall(Direction.NORTH):
-                sys.stdout.write('+---')
-            else:
-                sys.stdout.write('+   ')
-        sys.stdout.write('+\n')
-
-        # draw the west edge
-        for column in range(0, maze.columns):
-            if maze[(column, row)].has_wall(Direction.WEST):
-                sys.stdout.write('|')
-            else:
-                sys.stdout.write(' ')
-            if maze[(column, row)].is_visited():
-                sys.stdout.write('   ')
-            else:
-                sys.stdout.write(' # ')
-        sys.stdout.write('|\n')
-
-    # draw the bottom line
-    print('+---' * maze.columns + '+')
-    print()
-
-
 if __name__ == '__main__':
+
+    def display(maze: Maze):
+
+        for row in range(0, maze.rows):
+
+            # draw the north edge
+            for column in range(0, maze.columns):
+                if maze[(column, row)].has_wall(Direction.NORTH):
+                    sys.stdout.write('+---')
+                else:
+                    sys.stdout.write('+   ')
+            sys.stdout.write('+\n')
+
+            # draw the west edge
+            for column in range(0, maze.columns):
+                if maze[(column, row)].has_wall(Direction.WEST):
+                    sys.stdout.write('|')
+                else:
+                    sys.stdout.write(' ')
+                if maze[(column, row)].is_visited():
+                    sys.stdout.write('   ')
+                else:
+                    sys.stdout.write(' # ')
+            sys.stdout.write('|\n')
+
+        # draw the bottom line
+        print('+---' * maze.columns + '+')
+        print()
 
     def test():
         print("start")

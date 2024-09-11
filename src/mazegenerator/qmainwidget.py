@@ -43,6 +43,7 @@ class QMainWidget(QWidget):
         # print("Multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
         self.worker = None
 
+        self.from_visiting = None
         self._init_maze()
 
     def _get_rith_widget(self) -> QWidget:
@@ -224,6 +225,8 @@ class QMainWidget(QWidget):
             column, row = self.from_visiting
             self.cells[self.maze.columns * row + column].set_visiting(False)
             self.from_visiting = None
+
+        print(self.maze)
 
     def _display(self, processing):
         # print(f's{coord2}')
