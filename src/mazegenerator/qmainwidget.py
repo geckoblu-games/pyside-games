@@ -1,3 +1,4 @@
+from enum import Enum
 import sys
 import traceback
 
@@ -5,11 +6,27 @@ from PySide6.QtCore import Qt, QMargins, QRunnable, Slot, QObject, Signal, \
     QThreadPool
 from PySide6.QtGui import QPen
 from PySide6.QtWidgets import QWidget, QGridLayout, QLabel, QComboBox, \
-    QPushButton, QSpinBox, QGraphicsLineItem
+    QPushButton, QSpinBox, QGraphicsLineItem, QStyle, QCheckBox
 
+from mazegenerator.bfslonghestpath import BfsLonghestPath
 from mazegenerator.generator import randomizeddepthfirst
 from mazegenerator.generator.randomizeddepthfirst import RandomizedDepthFirst
 from mazegenerator.qgraphicsgrid import QGraphicsItemCell
+
+
+class RunningStatus(Enum):
+    RUNNING = 1
+    TERMINATED = 2
+    PAUSED = 4
+
+
+_DEFAULT_W = 45
+_DEFAULT_H = 35
+_DEFAULT_SPEED = 50
+
+# _DEFAULT_W = 8
+# _DEFAULT_H = 8
+# _DEFAULT_SPEED = 0
 
 
 class QMainWidget(QWidget):
@@ -28,7 +45,7 @@ class QMainWidget(QWidget):
 
         left_widget = self._get_left_widget(view)
 
-        right_widget = self._get_rith_widget()
+        right_widget = self._get_rigth_widget()
 
         layout = QGridLayout()
         layout.setContentsMargins(QMargins(0, 0, 0, 0))
@@ -41,12 +58,14 @@ class QMainWidget(QWidget):
 
         self.threadpool = QThreadPool()
         # print("Multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
-        self.worker = None
+        self._worker = None
 
+        self._running_status = RunningStatus.TERMINATED
+        self._set_status(self._running_status)
         self.from_visiting = None
         self._init_maze()
 
-    def _get_rith_widget(self) -> QWidget:
+    def _get_rigth_widget(self) -> QWidget:
         right_widget = QWidget()
         right_widget.setAutoFillBackground(True)
         # palette = right_widget.palette()
@@ -63,17 +82,21 @@ class QMainWidget(QWidget):
         self.combobox.addItems(["Randomized depth-first", "Two", "Three"])
         layout.addWidget(self.combobox, 2, 0)
 
-        layout.addWidget(QLabel("Size:"), 3, 0)
+        self.checkbox_longestpath = QCheckBox("Show longest path")
+        self.checkbox_longestpath.setChecked(True)
+        layout.addWidget(self.checkbox_longestpath, 3, 0)
+
+        layout.addWidget(QLabel("Size:"), 4, 0)
         self.spinbox_w = QSpinBox()
         self.spinbox_w.setMinimum(3)
         self.spinbox_w.setMaximum(100)
-        self.spinbox_w.setValue(45)
+        self.spinbox_w.setValue(_DEFAULT_W)
         # self.spinbox_w.setEnabled(False)
         self.spinbox_w.valueChanged.connect(self._init_maze)
         self.spinbox_h = QSpinBox()
         self.spinbox_h.setMinimum(3)
         self.spinbox_h.setMaximum(100)
-        self.spinbox_h.setValue(35)
+        self.spinbox_h.setValue(_DEFAULT_H)
         # self.spinbox_h.setEnabled(False)
         self.spinbox_h.valueChanged.connect(self._init_maze)
         layout2 = QGridLayout()
@@ -87,26 +110,24 @@ class QMainWidget(QWidget):
         layout2.setColumnStretch(4, 1)
         wdg = QWidget()
         wdg.setLayout(layout2)
-        layout.addWidget(wdg, 4, 0)
+        layout.addWidget(wdg, 5, 0)
 
-        layout.addWidget(QLabel("Speed:"), 5, 0)
+        layout.addWidget(QLabel("Speed:"), 6, 0)
         self.spinbox_speed = QSpinBox()
         self.spinbox_speed.setMinimum(0)
         self.spinbox_speed.setMaximum(1000)
         self.spinbox_speed.setSingleStep(10)
-        self.spinbox_speed.setValue(50)
+        self.spinbox_speed.setValue(_DEFAULT_SPEED)
         self.spinbox_speed.valueChanged.connect(self._speed_changed)
-        layout.addWidget(self.spinbox_speed, 6, 0)
+        layout.addWidget(self.spinbox_speed, 7, 0)
 
         # Just to fill the space
-        layout.addWidget(QWidget(), 7, 0)
-        layout.setRowStretch(7, 1)
+        layout.addWidget(QWidget(), 8, 0)
+        layout.setRowStretch(8, 1)
 
-        self.start_button = QPushButton("Start")
-        self.start_button.clicked.connect(self._start)
-        layout.addWidget(self.start_button, 8, 0)
+        layout.addWidget(self._get_controls_widget(), 9, 0)
 
-        layout.addWidget(QLabel(), 9, 0)
+        layout.addWidget(QLabel(), 10, 0)
 
         return right_widget
 
@@ -131,6 +152,35 @@ class QMainWidget(QWidget):
         left_widget.setLayout(layout)
 
         return left_widget
+
+    def _get_controls_widget(self) -> QWidget:
+        controll_widget = QWidget()
+        controll_widget.setAutoFillBackground(True)
+
+        layout = QGridLayout()
+        layout.setContentsMargins(QMargins(0, 0, 0, 0))
+        layout.setSpacing(0)
+
+        pixmapi = QStyle.SP_MediaPlay
+        icon = self.style().standardIcon(pixmapi)
+        self.start_button = QPushButton(icon, '')  # pylint: disable=attribute-defined-outside-init
+        self.start_button.clicked.connect(self._start)
+        layout.addWidget(self.start_button, 0, 0)
+
+        pixmapi = QStyle.SP_MediaPause
+        icon = self.style().standardIcon(pixmapi)
+        self.pause_button = QPushButton(icon, '')  # pylint: disable=attribute-defined-outside-init
+        self.pause_button.clicked.connect(self._pause)
+        layout.addWidget(self.pause_button, 0, 1)
+
+        pixmapi = QStyle.SP_MediaStop
+        icon = self.style().standardIcon(pixmapi)
+        self.stop_button = QPushButton(icon, '')  # pylint: disable=attribute-defined-outside-init
+        self.stop_button.clicked.connect(self._stop)
+        layout.addWidget(self.stop_button, 0, 2)
+
+        controll_widget.setLayout(layout)
+        return controll_widget
 
     def _init_maze(self):
         self.from_visiting = None
@@ -175,17 +225,38 @@ class QMainWidget(QWidget):
                 self.scene.addItem(cell)
                 self.cells.append(cell)
 
-    def _set_enabled(self, flag):
-        self.start_button.setEnabled(flag)
-        self.spinbox_w.setEnabled(flag)
-        self.spinbox_h.setEnabled(flag)
-        self.combobox.setEnabled(flag)
+    def _set_status(self, status: RunningStatus):
+        self._running_status = status
+        if status == RunningStatus.TERMINATED:
+            self.start_button.setEnabled(True)
+            self.pause_button.setEnabled(False)
+            self.stop_button.setEnabled(False)
+            self.spinbox_w.setEnabled(True)
+            self.spinbox_h.setEnabled(True)
+            self.combobox.setEnabled(True)
+            self.checkbox_longestpath.setEnabled(True)
+        elif status == RunningStatus.RUNNING:
+            self.start_button.setEnabled(False)
+            self.pause_button.setEnabled(True)
+            self.stop_button.setEnabled(True)
+            self.spinbox_w.setEnabled(False)
+            self.spinbox_h.setEnabled(False)
+            self.combobox.setEnabled(False)
+            self.checkbox_longestpath.setEnabled(False)
+        elif status == RunningStatus.PAUSED:
+            self.start_button.setEnabled(True)
+            self.pause_button.setEnabled(True)
+            self.stop_button.setEnabled(True)
+            self.spinbox_w.setEnabled(False)
+            self.spinbox_h.setEnabled(False)
+            self.combobox.setEnabled(False)
+            self.checkbox_longestpath.setEnabled(False)
 
     def _speed_changed(self):
         speed = self._get_speed()
 
-        if self.worker:
-            self.worker.set_speed(speed)
+        if self._worker:
+            self._worker.set_speed(speed)
 
     def _get_speed(self):
         speed = self.spinbox_speed.value()
@@ -195,45 +266,60 @@ class QMainWidget(QWidget):
         return speed
 
     def _start(self):
-        # print("start")
-        self._set_enabled(False)
+        if self._running_status == RunningStatus.TERMINATED:
+            self._set_status(RunningStatus.RUNNING)
+            self._init_maze()
 
-        self._init_maze()
+            # Here is a long-running process, in this case I can solve it with just a Timer,
+            # but I want to try a WorkerThreads
+            speed = self._get_speed()
+            self._worker = Worker(self.maze, speed)
+            self._worker.signals.processing.connect(self._display)
+            self._worker.signals.visiting.connect(self._visiting)
+            self._worker.signals.finished.connect(self._worker_finished)
+            self.threadpool.start(self._worker)
+        elif self._running_status == RunningStatus.PAUSED:
+            self._set_status(RunningStatus.RUNNING)
+            self._worker.pause(False)
 
-        # Here is a long-running process, in this case I can solve with just a Timer,
-        # but I want to try a WorkerThreads
-        speed = self._get_speed()
-        self.worker = Worker(self.maze, speed)
-        self.worker.signals.processing.connect(self._display)
-        self.worker.signals.visiting.connect(self._visiting)
-        self.worker.signals.finished.connect(self._worker_finished)
-        self.threadpool.start(self.worker)
+    def _pause(self):
+        if self._running_status == RunningStatus.RUNNING:
+            self._set_status(RunningStatus.PAUSED)
+            self._worker.pause(True)
+        elif self._running_status == RunningStatus.PAUSED:
+            self._set_status(RunningStatus.RUNNING)
+            self._worker.pause(False)
 
-        # for step in randomizeddepthfirst.generate(maze, 0, 0, depthfirst=True):
-        #     print(f"step {step}")
-        #     self._display(maze)
-        #     # time.sleep(speed)
-        #     if step > 200: break
-        #
-        # print("stop")
+    def _stop(self):
+        self._set_status(RunningStatus.TERMINATED)
+        if self._worker:
+            self._worker.stop()
 
     def _worker_finished(self):
-        self.worker = None
-        self._set_enabled(True)
+        self._worker = None
+        self._set_status(RunningStatus.TERMINATED)
 
         if self.from_visiting:
             column, row = self.from_visiting
             self.cells[self.maze.columns * row + column].set_visiting(False)
             self.from_visiting = None
 
+        print()
         print(self.maze)
 
+        if self.checkbox_longestpath.isChecked():
+            bfs = BfsLonghestPath(self.maze)
+            path = bfs.run()
+            print(f'BFS: {path}')
+            print(f'     lenght: {len(path)}')
+            for coord in path:
+                self.cells[self.maze.columns * coord[1] + coord[0]].set_in_path()
+            coord = path[0]
+            self.cells[self.maze.columns * coord[1] + coord[0]].set_start_path()
+            coord = path[len(path) - 1]
+            self.cells[self.maze.columns * coord[1] + coord[0]].set_end_path()
+
     def _display(self, processing):
-        # print(f's{coord2}')
-        # for row in range(0, self.maze.rows):
-        #     for column in range(0, self.maze.columns):
-        #         self.cells[self.maze.columns * row + column].set_status(self.maze[(column, row)])
-        # print(f'e{step}\n')
         from_coord, coord = processing
         column, row = coord
         self.cells[self.maze.columns * row + column].set_status(self.maze[coord])
@@ -242,11 +328,9 @@ class QMainWidget(QWidget):
         if from_coord:
             column, row = from_coord
             self.cells[self.maze.columns * row + column].set_status(self.maze[from_coord])
-        # self.from_visiting = coord
 
     def _visiting(self, visiting):
         column, row = visiting
-        # self.cells[self.maze.columns * row + column].set_status(self.maze[coord])
         self.cells[self.maze.columns * row + column].set_visiting(True)
         if self.from_visiting:
             column, row = self.from_visiting
@@ -263,15 +347,15 @@ class Worker(QRunnable):
 
         self._maze = maze
         self._speed = speed
-        self.alg = None
+        self._alg = None
 
     @Slot()
     def run(self):
         try:
-            self.alg = RandomizedDepthFirst(self._maze)
-            self.alg.visiting.connect(self.signals.visiting.emit)
-            self.alg.processing.connect(self.signals.processing.emit)
-            self.alg.run(self._speed)
+            self._alg = RandomizedDepthFirst(self._maze)
+            self._alg.visiting.connect(self.signals.visiting.emit)
+            self._alg.processing.connect(self.signals.processing.emit)
+            self._alg.run(self._speed)
 
             # for step in randomizeddepthfirst.generate(self.maze, 0, 0):
             #     self.signals.progress.emit(step)
@@ -283,10 +367,21 @@ class Worker(QRunnable):
         finally:
             self.signals.finished.emit()  # Done
 
+    @Slot(int)
     def set_speed(self, speed):
         self._speed = speed
-        if self.alg:
-            self.alg.sleep = speed
+        if self._alg:
+            self._alg.sleep = speed
+
+    @Slot()
+    def pause(self, flag):
+        if self._alg:
+            self._alg.pause(flag)
+
+    @Slot()
+    def stop(self):
+        if self._alg:
+            self._alg.stop()
 
 
 class WorkerSignals(QObject):

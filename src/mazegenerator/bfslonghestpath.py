@@ -33,6 +33,7 @@ class BfsLonghestPath(QObject):
             cell.set_visited(False)
             cell.prec = None
 
+        # Init
         if start is None:
             start = self._maze.center()
         to_visit = []
@@ -41,6 +42,7 @@ class BfsLonghestPath(QObject):
         to_visit.append(start)
         self._maze[start].distance = 0
 
+        # BFS visit
         while len(to_visit) > 0:
             time.sleep(self.sleep)
             coord = to_visit.pop(0)
@@ -57,11 +59,11 @@ class BfsLonghestPath(QObject):
                         max_distance = distance
                         max_distance_coord = neighbor_coord
                     to_visit.append(neighbor_coord)
-        # print(f"max_distance_coord: {max_distance_coord}")
 
         if absolute_longhest:
             return self.run(sleep, max_distance_coord, False)
         else:
+            # Calculate longest path
             path = []
             path.append(max_distance_coord)
             node = max_distance_coord

@@ -10,6 +10,7 @@ from mazegenerator import Direction
 COLOR_NOT_VISITED_BACKGROUND = QColor("#131926")
 COLOR_VISITED_BACKGROUND = Qt.GlobalColor.magenta
 COLOR_VISITING_BACKGROUND = Qt.GlobalColor.yellow
+COLOR_INPATH_BACKGROUND = QColor(COLOR_VISITED_BACKGROUND).lighter(120)
 COLOR_WALL = Qt.GlobalColor.black
 
 
@@ -65,12 +66,10 @@ class QGraphicsItemCell(QGraphicsItemGroup, QGraphicsGridPItem):
         QGraphicsGridPItem.__init__(self, cell_size, w_offset, h_offset)
 
         self.center = QGraphicsRectItem(0, 0, self.cell_size, self.cell_size)
-        # self.center.setPos(50, 20)
         brush = QBrush(COLOR_NOT_VISITED_BACKGROUND)
         self.center.setBrush(brush)
         pen = QPen(COLOR_NOT_VISITED_BACKGROUND)
         pen.setWidth(2)
-        # self.center.setPen(Qt.NoPen)
         self.center.setPen(pen)
         self.addToGroup(self.center)
 
@@ -88,17 +87,10 @@ class QGraphicsItemCell(QGraphicsItemGroup, QGraphicsGridPItem):
         self.east_wall = QGraphicsLineItem(self.cell_size, 0, self.cell_size, self.cell_size)
         self.east_wall.setPen(pen)
         self.addToGroup(self.east_wall)
-        # self.east_wall.setVisible(False)
 
         self.south_wall = QGraphicsLineItem(0, self.cell_size, self.cell_size, self.cell_size)
         self.south_wall.setPen(pen)
         self.addToGroup(self.south_wall)
-
-        # self.reset()
-
-    # def reset(self):
-    #     self.walls = Direction.NORTH | Direction.SOUTH | Direction.EAST | Direction.WEST
-    #     print(self.walls)
 
     def set_status(self, mazecell):
         if mazecell.is_visited():
@@ -134,5 +126,27 @@ class QGraphicsItemCell(QGraphicsItemGroup, QGraphicsGridPItem):
             self.center.setBrush(brush)
             pen = QPen(COLOR_VISITED_BACKGROUND)
             pen.setWidth(2)
-            # self.center.setPen(Qt.NoPen)
             self.center.setPen(pen)
+
+    def set_in_path(self):
+        brush = QBrush(COLOR_INPATH_BACKGROUND)
+        self.center.setBrush(brush)
+        pen = QPen(COLOR_INPATH_BACKGROUND)
+        pen.setWidth(2)
+        self.center.setPen(pen)
+
+    def set_start_path(self):
+        color = Qt.GlobalColor.darkGreen
+        brush = QBrush(color)
+        self.center.setBrush(brush)
+        pen = QPen(color)
+        pen.setWidth(2)
+        self.center.setPen(pen)
+
+    def set_end_path(self):
+        color = Qt.GlobalColor.darkRed
+        brush = QBrush(color)
+        self.center.setBrush(brush)
+        pen = QPen(color)
+        pen.setWidth(2)
+        self.center.setPen(pen)
