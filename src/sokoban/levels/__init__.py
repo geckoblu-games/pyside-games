@@ -55,11 +55,11 @@ class Level():
         self._build_reachables()
 
     @overload
-    def is_wall(self, column: int, row: int) -> None:  # pylint: disable=no-self-use
+    def is_wall(self, column: int, row: int) -> None:
         ...
 
     @overload
-    def is_wall(self, position: QPoint) -> None:  # pylint: disable=no-self-use
+    def is_wall(self, position: QPoint) -> None:
         ...
 
     def is_wall(self, column, row=None):
@@ -140,12 +140,12 @@ class Level():
 
 
 @overload
-def get_level(setname: str, ixd: int) -> Level:  # pylint: disable=no-self-use
+def get_level(setname: str, ixd: int) -> Level:
     ...
 
 
 @overload
-def get_level(setname: str, levelname: str) -> Level:  # pylint: disable=no-self-use
+def get_level(setname: str, levelname: str) -> Level:
     ...
 
 

@@ -29,4 +29,4 @@ def next_point(point: QPoint, direction: Direction) -> QPoint:
         return QPoint(point.x(), point.y() - 1)
 
     # Impossible but just to silence pylin
-    raise Exception("Unknown direction.")
+    raise ValueError(f"Unknown direction: {direction}")

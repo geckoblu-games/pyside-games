@@ -1,7 +1,8 @@
-#pylint: disable=bad-continuation
+
 
 def append_set(sets):
     sets['Sasquatch'] = _SET
+
 
 _SET = {}
 

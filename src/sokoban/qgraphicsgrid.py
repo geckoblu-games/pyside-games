@@ -99,7 +99,7 @@ class PlayerItem(QGraphicsGridPixmapItem):
         self.player_pixmas.append(QPixmap(":/images/player_up_1.svg").scaled(CELL_SIZE, CELL_SIZE))
         self.player_pixmas.append(QPixmap(":/images/player_up_3.svg").scaled(CELL_SIZE, CELL_SIZE))
 
-    def setGridPos(self, pos: QPoint, undo: bool=False) -> None:  # pylint: disable=arguments-differ,bad-whitespace
+    def setGridPos(self, pos: QPoint, undo: bool=False) -> None:
         prec_pos = self.gridPos()
         if not undo:
             if pos.x() > prec_pos.x():

@@ -18,7 +18,7 @@ class Direction(Enum):
             return Direction.LEFT
 
         # Should never happen
-        raise Exception("Unhandled direction")
+        raise ValueError("Unhandled direction")
 
 
 class GameState(Enum):

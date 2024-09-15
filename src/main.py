@@ -13,7 +13,7 @@ import mazegenerator.main
 class MainWindow(QDialog):
 
     def __init__(self):
-        super(MainWindow, self).__init__()
+        super().__init__()
 
         self.setWindowTitle("PySide6 Games")
         self.setWindowIcon(QIcon(':/qt-project.org/logos/pysidelogo.png'))

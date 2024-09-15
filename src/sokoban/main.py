@@ -29,9 +29,9 @@ else:
 WINDOW_WIDTH = VIEW_GRID_WIDTH * CELL_SIZE
 WINDOW_HEIGHT = VIEW_GRID_HEIGHT * CELL_SIZE
 
-COLOR_BACKGROUND = QColor("#131926")  
+COLOR_BACKGROUND = QColor("#131926")
 COLOR_GRAY = QColor("#333333")
-COLOR_FLOOR = Qt.GlobalColor.darkGray  
+COLOR_FLOOR = Qt.GlobalColor.darkGray
 
 
 @dataclass
@@ -312,7 +312,7 @@ class MainWindow(QMainWindow):
         button = QMessageBox.information(
             self,
             "Level completed",
-            f"\nDo you want to play next level?",
+            "\nDo you want to play next level?",
             buttons=QMessageBox.Yes | QMessageBox.No,
             defaultButton=QMessageBox.Yes,
         )
@@ -324,7 +324,7 @@ class MainWindow(QMainWindow):
         QMessageBox.information(
             self,
             "Set Completed",
-            f"\nCongratulations\nYou played all the levels of the set.",
+            "\nCongratulations\nYou played all the levels of the set.",
             buttons=QMessageBox.Ok,
             defaultButton=QMessageBox.Ok,
         )
@@ -333,7 +333,7 @@ class MainWindow(QMainWindow):
         button = QMessageBox.question(
             self,
             "Restart",
-            f"\nDo you really want to re-start the level?",
+            "\nDo you really want to re-start the level?",
             buttons=QMessageBox.Yes | QMessageBox.No,
             defaultButton=QMessageBox.Yes,
         )

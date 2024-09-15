@@ -79,7 +79,7 @@ class Sok2Py:
             for line in level:
                 outfile.write(f'\t"{line}",\n')
 
-            outfile.write(f"]\n")
+            outfile.write("]\n")
 
 
 def main():
@@ -104,7 +104,7 @@ def parse_cmdline():
     parser.add_argument('INPUT_SOK_FILE', type=argparse.FileType('r'),
                         help='Input SOK file to convert')
     parser.add_argument('OUTPUT_FILE_OR_DIR', type=pathlib.Path,
-                        help='Ouptut python module (if a dir is passed, the module name is the input file name)') # pylint: disable=line-too-long
+                        help='Ouptut python module (if a dir is passed, the module name is the input file name)')  # pylint: disable=line-too-long
 
     return parser.parse_args()
 

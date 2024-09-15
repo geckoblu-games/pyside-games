@@ -112,7 +112,7 @@ class MainWindow(QMainWindow):
         self.fruit.setZValue(10)
         self.scene.addItem(self.fruit)
 
-        self.score_label = QGraphicsSimpleTextItem(f"Points: 0")
+        self.score_label = QGraphicsSimpleTextItem("Points: 0")
         self.score_label.setBrush(QBrush(Qt.GlobalColor.darkGreen))
         # self.score_label.setPen(QPen(Qt.GlobalColor.black))
         # sansFont = QFont("", 16, QFont.Bold)

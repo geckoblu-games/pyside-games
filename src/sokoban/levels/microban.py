@@ -1,7 +1,9 @@
-# pylint: disable=bad-continuation,too-many-lines
+# pylint: disable=too-many-lines
+
 
 def append_set(sets):
     sets['Microban'] = _SET
+
 
 _SET = {}
 
