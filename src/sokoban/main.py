@@ -349,7 +349,6 @@ class MainWindow(QMainWindow):
 
 def main(app=None):
 
-    QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
     QApplication.setWindowIcon(QIcon(":/images/icon.svg"))
     QApplication.setApplicationName("Sokoban")
     QApplication.setOrganizationDomain("geckoblu.net")

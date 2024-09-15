@@ -50,7 +50,7 @@ class BfsLonghestPath(QObject):
                 self._maze[coord].set_visited()
                 if self.sleep > 0:
                     self.visiting.emit(coord)
-                for neighbor_coord in self._maze.neighbors(coord, False):
+                for neighbor_coord in self._maze.visitable_neighbors(coord, False):
                     distance = self._maze[coord].distance + 1
                     self._maze[neighbor_coord].distance = distance
                     self._maze[neighbor_coord].prec = coord

@@ -9,9 +9,10 @@ from PySide6.QtWidgets import QWidget, QGridLayout, QLabel, QComboBox, \
     QPushButton, QSpinBox, QGraphicsLineItem, QStyle, QCheckBox
 
 from mazegenerator.bfslonghestpath import BfsLonghestPath
-from mazegenerator.generator import randomizeddepthfirst
+from mazegenerator.generator.randomizedbreathfirst import RandomizedBrathFirst
 from mazegenerator.generator.randomizeddepthfirst import RandomizedDepthFirst
-from mazegenerator.qgraphicsgrid import QGraphicsItemCell
+from mazegenerator.maze import Maze
+from mazegenerator.qgraphicsgrid import QGraphicsItemCell, CellStatus
 
 
 class RunningStatus(Enum):
@@ -26,7 +27,7 @@ _DEFAULT_SPEED = 50
 
 # _DEFAULT_W = 8
 # _DEFAULT_H = 8
-# _DEFAULT_SPEED = 0
+# _DEFAULT_SPEED = 1000
 
 
 class QMainWidget(QWidget):
@@ -62,7 +63,6 @@ class QMainWidget(QWidget):
 
         self._running_status = RunningStatus.TERMINATED
         self._set_status(self._running_status)
-        self.from_visiting = None
         self._init_maze()
 
     def _get_rigth_widget(self) -> QWidget:
@@ -79,7 +79,8 @@ class QMainWidget(QWidget):
 
         layout.addWidget(QLabel("Algorithm:"), 1, 0)
         self.combobox = QComboBox()
-        self.combobox.addItems(["Randomized depth-first", "Two", "Three"])
+        self.combobox.addItem("Randomized depth-first", "DFT")
+        self.combobox.addItem("Randomized breath-first", "BFT")
         layout.addWidget(self.combobox, 2, 0)
 
         self.checkbox_longestpath = QCheckBox("Show longest path")
@@ -183,7 +184,6 @@ class QMainWidget(QWidget):
         return controll_widget
 
     def _init_maze(self):
-        self.from_visiting = None
         self.scene.clear()
 
         scene_width = self.scene.sceneRect().width()
@@ -208,7 +208,7 @@ class QMainWidget(QWidget):
         h = self.spinbox_h.value()
         w = self.spinbox_w.value()
 
-        self.maze = randomizeddepthfirst.Maze(w, h)
+        self.maze = Maze(w, h)
 
         max_cell_width = int(scene_width / self.maze.columns)
         max_cell_heigth = int(scene_height / self.maze.rows)
@@ -260,8 +260,7 @@ class QMainWidget(QWidget):
 
     def _get_speed(self):
         speed = self.spinbox_speed.value()
-        if speed <= 1:
-            speed = 1
+        speed = max(speed, 1)
         speed = speed / 1000.0
         return speed
 
@@ -272,10 +271,12 @@ class QMainWidget(QWidget):
 
             # Here is a long-running process, in this case I can solve it with just a Timer,
             # but I want to try a WorkerThreads
+            algtype = self.combobox.currentData()
             speed = self._get_speed()
-            self._worker = Worker(self.maze, speed)
-            self._worker.signals.processing.connect(self._display)
+            self._worker = Worker(self.maze, speed, algtype)
+            self._worker.signals.tovisit.connect(self._tovisit)
             self._worker.signals.visiting.connect(self._visiting)
+            self._worker.signals.visited.connect(self._visited)
             self._worker.signals.finished.connect(self._worker_finished)
             self.threadpool.start(self._worker)
         elif self._running_status == RunningStatus.PAUSED:
@@ -295,77 +296,75 @@ class QMainWidget(QWidget):
         if self._worker:
             self._worker.stop()
 
-    def _worker_finished(self):
+    def _worker_finished(self, complete):
         self._worker = None
         self._set_status(RunningStatus.TERMINATED)
 
-        if self.from_visiting:
-            column, row = self.from_visiting
-            self.cells[self.maze.columns * row + column].set_visiting(False)
-            self.from_visiting = None
+        if complete:
+            print()
+            print(self.maze)
 
-        print()
-        print(self.maze)
+            if self.checkbox_longestpath.isChecked():
+                bfs = BfsLonghestPath(self.maze)
+                path = bfs.run()
+                print(f'BFS: {path}')
+                print(f'     lenght: {len(path)}')
+                for coord in path:
+                    self.cells[self.maze.columns * coord[1] + coord[0]].set_in_path()
+                coord = path[0]
+                self.cells[self.maze.columns * coord[1] + coord[0]].set_start_path()
+                coord = path[len(path) - 1]
+                self.cells[self.maze.columns * coord[1] + coord[0]].set_end_path()
 
-        if self.checkbox_longestpath.isChecked():
-            bfs = BfsLonghestPath(self.maze)
-            path = bfs.run()
-            print(f'BFS: {path}')
-            print(f'     lenght: {len(path)}')
-            for coord in path:
-                self.cells[self.maze.columns * coord[1] + coord[0]].set_in_path()
-            coord = path[0]
-            self.cells[self.maze.columns * coord[1] + coord[0]].set_start_path()
-            coord = path[len(path) - 1]
-            self.cells[self.maze.columns * coord[1] + coord[0]].set_end_path()
-
-    def _display(self, processing):
-        from_coord, coord = processing
+    def _tovisit(self, coord):
         column, row = coord
-        self.cells[self.maze.columns * row + column].set_status(self.maze[coord])
-        if self.from_visiting == coord:
-            self.cells[self.maze.columns * row + column].set_visiting(True)
-        if from_coord:
-            column, row = from_coord
-            self.cells[self.maze.columns * row + column].set_status(self.maze[from_coord])
+        self.cells[self.maze.columns * row + column].set_status(self.maze[coord], CellStatus.TOVISIT)
 
-    def _visiting(self, visiting):
-        column, row = visiting
-        self.cells[self.maze.columns * row + column].set_visiting(True)
-        if self.from_visiting:
-            column, row = self.from_visiting
-            self.cells[self.maze.columns * row + column].set_visiting(False)
-        self.from_visiting = visiting
+    def _visiting(self, coord):
+        column, row = coord
+        self.cells[self.maze.columns * row + column].set_status(self.maze[coord], CellStatus.VISITING)
+
+    def _visited(self, coord):
+        column, row = coord
+        self.cells[self.maze.columns * row + column].set_status(self.maze[coord], CellStatus.VISITED)
+        for neighbor in self.maze.neighbors(coord):
+            column, row = neighbor
+            self.cells[self.maze.columns * row + column].set_status(self.maze[neighbor], None)
 
 
 class Worker(QRunnable):
 
-    def __init__(self, maze, speed):
-        super(Worker, self).__init__()
+    def __init__(self, maze, speed, algtype):
+        super().__init__()
 
         self.signals = WorkerSignals()
 
         self._maze = maze
         self._speed = speed
-        self._alg = None
+
+        if algtype == 'DFT':
+            self._alg = RandomizedDepthFirst(self._maze)
+        elif algtype == 'BFT':
+            self._alg = RandomizedBrathFirst(self._maze)
+        else:
+            raise ValueError(f"Unknown alorithm type: {algtype}")
+
+        self._alg.tovisit.connect(self.signals.tovisit.emit)
+        self._alg.visiting.connect(self.signals.visiting.emit)
+        self._alg.visited.connect(self.signals.visited.emit)
+        # self._alg.finished.connect(self.signals.finished.emit)
 
     @Slot()
     def run(self):
+        complete = False
         try:
-            self._alg = RandomizedDepthFirst(self._maze)
-            self._alg.visiting.connect(self.signals.visiting.emit)
-            self._alg.processing.connect(self.signals.processing.emit)
-            self._alg.run(self._speed)
-
-            # for step in randomizeddepthfirst.generate(self.maze, 0, 0):
-            #     self.signals.progress.emit(step)
-            #     time.sleep(self.speed)
-        except:
+            complete = self._alg.run(self._speed)
+        except:  # pylint: disable=bare-except
             traceback.print_exc()
             exctype, value = sys.exc_info()[:2]
             self.signals.error.emit((exctype, value, traceback.format_exc()))
         finally:
-            self.signals.finished.emit()  # Done
+            self.signals.finished.emit(complete)  # Done
 
     @Slot(int)
     def set_speed(self, speed):
@@ -403,8 +402,8 @@ class WorkerSignals(QObject):
         int indicating % progress
 
     '''
-    finished = Signal()
     error = Signal(tuple)
-    # result = Signal(object)
+    tovisit = Signal(tuple)
     visiting = Signal(tuple)
-    processing = Signal(tuple)
+    visited = Signal(tuple)
+    finished = Signal(bool)

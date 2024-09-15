@@ -88,6 +88,19 @@ class Maze:
     def neighbors(self, coord: (int, int), include_visited=True):
         column, row = coord
         neighbors = []
+        if row > 0 and (include_visited or not self[column, row - 1].is_visited()):
+            neighbors.append((column, row - 1))
+        if row < self._rows - 1 and (include_visited or not self[column, row + 1].is_visited()):
+            neighbors.append((column, row + 1))
+        if column > 0 and (include_visited or not self[column - 1, row].is_visited()):
+            neighbors.append((column - 1, row))
+        if column < self._columns - 1 and (include_visited or not self[column + 1, row].is_visited()):
+            neighbors.append((column + 1, row))
+        return neighbors
+
+    def visitable_neighbors(self, coord: (int, int), include_visited=True):
+        column, row = coord
+        neighbors = []
         if row > 0 and not self[column, row].has_wall(Direction.NORTH) \
                    and (include_visited or not self[column, row - 1].is_visited()):
             neighbors.append((column, row - 1))
@@ -124,7 +137,7 @@ class Maze:
                 self[to_coord].remove_wall(Direction.EAST)
                 return
 
-    def print(self, fn_w=None):  # pylint: disable=too-many-branches
+    def print(self, fn_w=lambda _coord: ' '):  # pylint: disable=too-many-branches
 
         # First row
         for row in range(0, self._rows):
@@ -226,7 +239,7 @@ class Maze:
         elif flag == 1111:
             sys.stdout.write('┼')
         else:
-            raise Exception(f"Unexpected flag: {flag}")
+            raise ValueError(f"Unexpected flag: {flag}")
 
     def __repr__(self):
         rpr = f'Maze[{self._columns},{self._rows}'  # ,{self.start[1]},{self.start[2]}'
