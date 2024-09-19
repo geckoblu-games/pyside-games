@@ -7,7 +7,7 @@ from mazegenerator.generator.abstractgenerator import AbstractGenerator
 from mazegenerator.maze import Maze
 
 
-class RandomizedBrathFirst(AbstractGenerator):
+class RandomizedBreadthFirst(AbstractGenerator):
 
     @override
     def run(self, sleep=0):
@@ -45,6 +45,8 @@ class RandomizedBrathFirst(AbstractGenerator):
                 self._maze[coord].set_visited()
                 self.visited.emit(coord)
 
+        return len(to_visit) == 0
+
 
 if __name__ == '__main__':
 
@@ -60,7 +62,7 @@ if __name__ == '__main__':
 
         display_step = True
 
-        alg = RandomizedBrathFirst(maze)
+        alg = RandomizedBreadthFirst(maze)
         if display_step:
             alg.visiting.connect(lambda coord: display(maze, coord))
 

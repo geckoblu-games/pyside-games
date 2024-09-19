@@ -208,7 +208,9 @@ class Maze:
         if self[(column, row - 1)].has_wall(Direction.WEST):
             flag += 1000
 
-        if flag == 1:
+        if flag == 0:
+            sys.stdout.write(' ')
+        elif flag == 1:
             sys.stdout.write('╶')
         elif flag == 10:
             sys.stdout.write('╴')

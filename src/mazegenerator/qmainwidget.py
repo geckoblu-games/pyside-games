@@ -9,8 +9,9 @@ from PySide6.QtWidgets import QWidget, QGridLayout, QLabel, QComboBox, \
     QPushButton, QSpinBox, QGraphicsLineItem, QStyle, QCheckBox
 
 from mazegenerator.bfslonghestpath import BfsLonghestPath
-from mazegenerator.generator.randomizedbreathfirst import RandomizedBrathFirst
+from mazegenerator.generator.randomizedbreadthfirst import RandomizedBreadthFirst
 from mazegenerator.generator.randomizeddepthfirst import RandomizedDepthFirst
+from mazegenerator.generator.randomizedkruskal import RandomizedKruskal
 from mazegenerator.maze import Maze
 from mazegenerator.qgraphicsgrid import QGraphicsItemCell, CellStatus
 
@@ -25,8 +26,8 @@ _DEFAULT_W = 45
 _DEFAULT_H = 35
 _DEFAULT_SPEED = 50
 
-# _DEFAULT_W = 8
-# _DEFAULT_H = 8
+# _DEFAULT_W = 4
+# _DEFAULT_H = 4
 # _DEFAULT_SPEED = 1000
 
 
@@ -80,7 +81,8 @@ class QMainWidget(QWidget):
         layout.addWidget(QLabel("Algorithm:"), 1, 0)
         self.combobox = QComboBox()
         self.combobox.addItem("Randomized depth-first", "DFT")
-        self.combobox.addItem("Randomized breath-first", "BFT")
+        self.combobox.addItem("Randomized breadth-first", "BFT")
+        self.combobox.addItem("Randomized Kruskal", "RKA")
         layout.addWidget(self.combobox, 2, 0)
 
         self.checkbox_longestpath = QCheckBox("Show longest path")
@@ -345,7 +347,9 @@ class Worker(QRunnable):
         if algtype == 'DFT':
             self._alg = RandomizedDepthFirst(self._maze)
         elif algtype == 'BFT':
-            self._alg = RandomizedBrathFirst(self._maze)
+            self._alg = RandomizedBreadthFirst(self._maze)
+        elif algtype == 'RKA':
+            self._alg = RandomizedKruskal(self._maze)
         else:
             raise ValueError(f"Unknown alorithm type: {algtype}")
 
