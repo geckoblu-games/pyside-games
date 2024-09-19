@@ -48,6 +48,8 @@ Levels:
 
 ## Mazegenerator
 
+![screenshot](./assets/screenshot-mazegenerator.png)
+
 Visualizes the generation of mazes using different algorithms
 
 
@@ -56,5 +58,5 @@ Visualizes the generation of mazes using different algorithms
 - [Wikipedia: Maze generation algorithm](https://en.wikipedia.org/wiki/Maze_generation_algorithm)
 - [Think Labyrinth: Maze Algorithms](https://www.astrolog.org/labyrnth/algrithm.htm)
 - [Visualizing Algorithms](https://bost.ocks.org/mike/algorithms/#maze-generation)
-
 - [StackOverflow: What's a good algorithm to generate a maze?](https://stackoverflow.com/questions/38502/whats-a-good-algorithm-to-generate-a-maze)
+- [The Buckblog: Maze Generation: Algorithm Recap](https://weblog.jamisbuck.org/2011/2/7/maze-generation-algorithm-recap)
