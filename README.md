@@ -60,3 +60,4 @@ Visualizes the generation of mazes using different algorithms
 - [Visualizing Algorithms](https://bost.ocks.org/mike/algorithms/#maze-generation)
 - [StackOverflow: What's a good algorithm to generate a maze?](https://stackoverflow.com/questions/38502/whats-a-good-algorithm-to-generate-a-maze)
 - [The Buckblog: Maze Generation: Algorithm Recap](https://weblog.jamisbuck.org/2011/2/7/maze-generation-algorithm-recap)
+- [Eller's Algorithm](http://www.neocomputer.org/projects/eller.html)

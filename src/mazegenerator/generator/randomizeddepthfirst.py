@@ -11,7 +11,7 @@ from mazegenerator.maze import Maze
 class RandomizedDepthFirst(AbstractGenerator):
 
     @override
-    def run(self, sleep=0):
+    def run(self, sleep=0) -> bool:
 
         self.sleep = sleep
 

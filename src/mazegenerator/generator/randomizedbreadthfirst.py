@@ -10,7 +10,7 @@ from mazegenerator.maze import Maze
 class RandomizedBreadthFirst(AbstractGenerator):
 
     @override
-    def run(self, sleep=0):
+    def run(self, sleep=0) -> bool:
 
         self.sleep = sleep
         to_visit = []

@@ -34,7 +34,7 @@ class BfsLonghestPath(QObject):
             cell.prec = None
 
         # Init
-        if start is None:
+        if not start:
             start = self._maze.center()
         to_visit = []
         max_distance = 0

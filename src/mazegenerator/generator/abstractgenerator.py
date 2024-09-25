@@ -35,7 +35,7 @@ class AbstractGenerator(QObject):
         self._running = False
         self._paused = False
 
-    def run(self, sleep=0):
+    def run(self, sleep=0) -> bool:
         raise NotImplementedError('To be implemented.')
 
     def stop(self):

@@ -9,6 +9,7 @@ from PySide6.QtWidgets import QWidget, QGridLayout, QLabel, QComboBox, \
     QPushButton, QSpinBox, QGraphicsLineItem, QStyle, QCheckBox
 
 from mazegenerator.bfslonghestpath import BfsLonghestPath
+from mazegenerator.generator.eller import Eller
 from mazegenerator.generator.randomizedbreadthfirst import RandomizedBreadthFirst
 from mazegenerator.generator.randomizeddepthfirst import RandomizedDepthFirst
 from mazegenerator.generator.randomizedkruskal import RandomizedKruskal
@@ -83,6 +84,7 @@ class QMainWidget(QWidget):
         self.combobox.addItem("Randomized depth-first", "DFT")
         self.combobox.addItem("Randomized breadth-first", "BFT")
         self.combobox.addItem("Randomized Kruskal", "RKA")
+        self.combobox.addItem("Eller's Algorithm", "ELL")
         layout.addWidget(self.combobox, 2, 0)
 
         self.checkbox_longestpath = QCheckBox("Show longest path")
@@ -350,6 +352,8 @@ class Worker(QRunnable):
             self._alg = RandomizedBreadthFirst(self._maze)
         elif algtype == 'RKA':
             self._alg = RandomizedKruskal(self._maze)
+        elif algtype == 'ELL':
+            self._alg = Eller(self._maze)
         else:
             raise ValueError(f"Unknown alorithm type: {algtype}")
 
